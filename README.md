@@ -1,10 +1,9 @@
 部署说明
 1. 环境要求
 
-Node.js 16+
-Go 1.21+
+Node.js 16+  
+Go 1.21+  
 Solidity编译器
-MetaMask钱包
 
 2. 智能合约部署
 ```shell

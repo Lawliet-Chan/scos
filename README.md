@@ -48,59 +48,74 @@ npx hardhat run scripts/deploy.js --network scrollSepolia
 
 
 API文档
-```shell
+
 1. 获取Stock价格
+```
    GET /api/stock/{symbol}/price
    Response: {
-   "symbol": "STOCK",
-   "price": 100.0,
-   "updated_at": "2024-01-01T00:00:00Z"
+     "symbol": "STOCK",
+     "price": 100.0,
+     "updated_at": "2024-01-01T00:00:00Z"
    }
+```   
 2. 更新Stock价格 (管理员)
+```shell
    POST /api/stock/{symbol}/price
-   Body: {
-   "price": 120.0
-   }
+      Body: {
+        "price": 120.0
+      }
+```
+   
 3. 获取用户SCOS余额
+```shell
    GET /api/user/{address}/scos
    Response: {
-   "address": "0x...",
-   "scos_balance": 1000.0,
-   "active_stakes": 2
+     "address": "0x...",
+     "scos_balance": 1000.0,
+     "active_stakes": 2
    }
+```
 4. 质押Stock
-   POST /api/stake
-   Body: {
-   "user_address": "0x...",
-   "token_address": "0x...",
-   "chain": "ethereum",
-   "amount": "100",
-   "contract_address": "0x..."
-   }
+```shell
+  POST /api/stake
+     Body: {
+       "user_address": "0x...",
+       "token_address": "0x...",
+       "chain": "ethereum",
+       "amount": "100",
+       "contract_address": "0x..."
+     }
+```
+   
 5. 赎回Stock
+```shell
    POST /api/redeem
    Body: {
-   "user_address": "0x...",
-   "token_address": "0x...",
-   "chain": "ethereum",
-   "contract_address": "0x..."
+     "user_address": "0x...",
+     "token_address": "0x...",
+     "chain": "ethereum",
+     "contract_address": "0x..."
    }
+```
 6. 买入Stock
+```shell
    POST /api/buy
    Body: {
-   "user_address": "0x...",
-   "token_address": "0x...",
-   "chain": "ethereum",
-   "amount": "100",
-   "contract_address": "0x..."
+     "user_address": "0x...",
+     "token_address": "0x...",
+     "chain": "ethereum",
+     "amount": "100",
+     "contract_address": "0x..."
    }
+```
 7. 卖出Stock
+```shell
    POST /api/sell
    Body: {
-   "user_address": "0x...",
-   "token_address": "0x...",
-   "chain": "ethereum",
-   "amount": "100",
-   "contract_address": "0x..."
+     "user_address": "0x...",
+     "token_address": "0x...",
+     "chain": "ethereum",
+     "amount": "100",
+     "contract_address": "0x..."
    }
 ```

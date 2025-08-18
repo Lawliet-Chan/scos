@@ -1,0 +1,45 @@
+{
+  "port": "8080",
+  "private_key": "07b00892ace244f4f9f2f3b43ec294d87ed113c33790d330e4c28e2ff1133d3d",
+  "networks": {
+    "ethereum": "https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID",
+    "polygon": "https://polygon-mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID",
+    "bsc": "https://bsc-dataseed.binance.org/",
+    "sepolia": "https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID",
+    "mumbai": "https://polygon-mumbai.infura.io/v3/YOUR_INFURA_PROJECT_ID"
+  },
+  "contract_addr": "0x1234567890123456789012345678901234567890",
+  "scos_addr": "0x0987654321098765432109876543210987654321",
+  "supported_tokens": {
+    "ethereum": {
+      "ETH": "0x0000000000000000000000000000000000000000",
+      "USDC": "0xA0b86a33E6441E0B46df0A7FEf2aD3de9c8Ba24b",
+      "USDT": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+    },
+    "polygon": {
+      "MATIC": "0x0000000000000000000000000000000000001010",
+      "USDC": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+      "USDT": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+    },
+    "bsc": {
+      "BNB": "0x0000000000000000000000000000000000000000",
+      "BUSD": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+      "USDT": "0x55d398326f99059fF775485246999027B3197955"
+    }
+  },
+  "liquidation_settings": {
+    "collateral_ratio": 140,
+    "liquidation_threshold": 125,
+    "price_drop_threshold": 25,
+    "check_interval_seconds": 30
+  },
+  "cors_settings": {
+    "allowed_origins": ["http://localhost:3000", "https://yourdomain.com"],
+    "allowed_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allowed_headers": ["Content-Type", "Authorization"]
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/app.log"
+  }
+}

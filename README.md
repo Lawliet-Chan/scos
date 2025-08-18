@@ -40,36 +40,9 @@ npx http-server -p 3000
 
 合约部署脚本 (deploy.js)
 ```
-javascriptasync function main() {
-const [deployer] = await ethers.getSigners();
+npx hardhat run scripts/deploy.js --network reddio
 
-    console.log("Deploying contracts with the account:", deployer.address);
-    console.log("Account balance:", (await deployer.getBalance()).toString());
-
-    // 部署SCOS代币
-    const SCOS = await ethers.getContractFactory("SCOS");
-    const scos = await SCOS.deploy();
-    await scos.deployed();
-    console.log("SCOS deployed to:", scos.address);
-
-    // 部署质押合约
-    const StockVault = await ethers.getContractFactory("StockVault");
-    const vault = await StockVault.deploy(scos.address, deployer.address);
-    await vault.deployed();
-    console.log("StockVault deployed to:", vault.address);
-
-    // 设置权限
-    await scos.transferOwnership(vault.address);
-    console.log("SCOS ownership transferred to vault contract");
-}
-
-main()
-.then(() => process.exit(0))
-.catch((error) => {
-console.error(error);
-process.exit(1);
-});
-
+npx hardhat run scripts/deploy.js --network scrollSepolia
 
 ```
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"math/big"
+	"scos/config"
 	"strings"
 
 	"github.com/ethereum/go-ethereum"
@@ -19,15 +20,15 @@ type BlockchainClient struct {
 	privateKey *ecdsa.PrivateKey
 }
 
-func NewBlockchainClient(rpcUrls map[string]string, privateKeyHex string) (*BlockchainClient, error) {
+func NewBlockchainClient(chains map[string]config.ChainInfo, privateKeyHex string) (*BlockchainClient, error) {
 	clients := make(map[string]*ethclient.Client)
 
-	for chain, url := range rpcUrls {
-		client, err := ethclient.Dial(url)
+	for chainName, chain := range chains {
+		client, err := ethclient.Dial(chain.RPC)
 		if err != nil {
 			return nil, err
 		}
-		clients[chain] = client
+		clients[chainName] = client
 	}
 
 	privateKey, err := crypto.HexToECDSA(strings.TrimPrefix(privateKeyHex, "0x"))

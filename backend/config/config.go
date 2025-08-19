@@ -21,12 +21,12 @@ func LoadConfig() *Config {
 		Port:       getEnv("PORT", "8080"),
 		PrivateKey: "01c7939dc6827ee10bb7d26f420618c4af88c0029aa70be202f1ca7f29fe5bb4", // 写死私钥
 		Chains: map[string]ChainInfo{
-			"reddio": {
+			"Reddio": {
 				RPC:         "https://reddio-dev.reddio.com/",
 				ChainID:     "50341",
 				SCOSAddress: "",
 			},
-			"scroll": {
+			"Scroll": {
 				RPC:         "https://sepolia-rpc.scroll.io",
 				ChainID:     "534351",
 				SCOSAddress: "",

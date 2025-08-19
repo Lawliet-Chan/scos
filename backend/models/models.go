@@ -11,17 +11,18 @@ type User struct {
 }
 
 type StakeRecord struct {
-	ID           uint      `json:"id" gorm:"primaryKey"`
-	UserAddress  string    `json:"user_address"`
-	TokenAddress string    `json:"token_address"`
-	StockSymbol  string    `json:"stock_symbol"`
-	Chain        string    `json:"chain"`
-	Amount       string    `json:"amount"`
-	SCOSBorrowed string    `json:"scos_borrowed"`
-	Status       string    `json:"status"` // active, redeemed, liquidated
-	StakePrice   string    `json:"stake_price"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	ID              uint      `json:"id" gorm:"primaryKey"`
+	UserAddress     string    `json:"user_address"`
+	TokenAddress    string    `json:"token_address"`
+	StockSymbol     string    `json:"stock_symbol"`
+	Chain           string    `json:"chain"`
+	ContractAddress string    `json:"contract_address"`
+	Amount          string    `json:"amount"`
+	SCOSBorrowed    string    `json:"scos_borrowed"`
+	Status          string    `json:"status"` // active, redeemed, liquidated
+	StakePrice      string    `json:"stake_price"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
 }
 
 type TokenPrice struct {

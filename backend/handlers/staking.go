@@ -64,16 +64,17 @@ func (h *StakingHandler) StakeStock(c *gin.Context) {
 
 	// 记录到数据库
 	stake := models.StakeRecord{
-		UserAddress:  req.UserAddress,
-		TokenAddress: req.TokenAddress,
-		StockSymbol:  req.StockSymbol,
-		Chain:        req.Chain,
-		Amount:       req.Amount,
-		SCOSBorrowed: fmt.Sprintf("%.6f", scosAmount),
-		Status:       "active",
-		StakePrice:   fmt.Sprintf("%.6f", price.Price),
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
+		UserAddress:     req.UserAddress,
+		TokenAddress:    req.TokenAddress,
+		StockSymbol:     req.StockSymbol,
+		Chain:           req.Chain,
+		ContractAddress: req.ContractAddress,
+		Amount:          req.Amount,
+		SCOSBorrowed:    fmt.Sprintf("%.6f", scosAmount),
+		Status:          "active",
+		StakePrice:      fmt.Sprintf("%.6f", price.Price),
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
 	}
 
 	if err := h.db.Create(&stake).Error; err != nil {
@@ -119,6 +120,12 @@ func (h *StakingHandler) RedeemStock(c *gin.Context) {
 	if err := h.db.Where("user_address = ? AND token_address = ? AND chain = ? AND status = ?",
 		req.UserAddress, req.TokenAddress, req.Chain, "active").First(&stake).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "No active stake found"})
+		return
+	}
+
+	_, err := h.bc.UnstakeStock(req.Chain, req.ContractAddress, req.TokenAddress)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unstake on blockchain"})
 		return
 	}
 

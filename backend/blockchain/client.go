@@ -162,3 +162,72 @@ func (bc *BlockchainClient) UnstakeStock(chain, contractAddr, tokenAddr string) 
 
 	return tx.Hash().Hex(), nil
 }
+
+func (bc *BlockchainClient) Liquidate(chain, contractAddr, userAddr, tokenAddr string) (string, error) {
+	client := bc.GetClient(chain)
+
+	contractABI := `{
+  "type": "function",
+  "name": "liquidate",
+  "inputs": [
+    {
+      "name": "user",
+      "type": "address"
+    },
+    {
+      "name": "token",
+      "type": "address"
+    }
+  ],
+  "outputs": [],
+  "stateMutability": "nonpayable"
+}`
+
+	parsedABI, err := abi.JSON(strings.NewReader(contractABI))
+	if err != nil {
+		return "", err
+	}
+
+	data, err := parsedABI.Pack("liquidate", common.HexToAddress(userAddr), common.HexToAddress(tokenAddr))
+	if err != nil {
+		return "", err
+	}
+
+	auth, err := bc.auth(chain)
+	if err != nil {
+		return "", err
+	}
+
+	nonce, err := client.PendingNonceAt(context.Background(), auth.From)
+	if err != nil {
+		return "", err
+	}
+
+	gasPrice, err := client.SuggestGasPrice(context.Background())
+	if err != nil {
+		return "", err
+	}
+
+	msg := ethereum.CallMsg{
+		From: auth.From,
+		To:   &common.Address{},
+		Data: data,
+	}
+	gasLimit, err := client.EstimateGas(context.Background(), msg)
+	if err != nil {
+		gasLimit = 300000 // fallback
+	}
+
+	auth.Nonce = big.NewInt(int64(nonce))
+	auth.Value = big.NewInt(0)
+	auth.GasLimit = gasLimit
+	auth.GasPrice = gasPrice
+
+	boundContract := bind.NewBoundContract(common.HexToAddress(contractAddr), parsedABI, client, client, client)
+	tx, err := boundContract.Transact(auth, "liquidate", common.HexToAddress(userAddr), common.HexToAddress(tokenAddr))
+	if err != nil {
+		return "", err
+	}
+
+	return tx.Hash().Hex(), nil
+}

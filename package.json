@@ -1,0 +1,24 @@
+{
+  "name": "scos",
+  "version": "1.0.0",
+  "description": "部署说明 1. 环境要求      - Node.js 16+       - Go 1.21+      - Solidity编译器",
+  "main": "hardhat.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lawliet-Chan/scos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lawliet-Chan/scos/issues"
+  },
+  "homepage": "https://github.com/Lawliet-Chan/scos#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0"
+  }
+}

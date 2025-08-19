@@ -19,7 +19,7 @@ type ChainInfo struct {
 func LoadConfig() *Config {
 	return &Config{
 		Port:       getEnv("PORT", "8080"),
-		PrivateKey: "36a15f8d63742eaabf9ebb32a8551db13d6a3167", // 写死私钥
+		PrivateKey: "01c7939dc6827ee10bb7d26f420618c4af88c0029aa70be202f1ca7f29fe5bb4", // 写死私钥
 		Chains: map[string]ChainInfo{
 			"reddio": {
 				RPC:         "https://reddio-dev.reddio.com/",

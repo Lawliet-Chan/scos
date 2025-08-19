@@ -1,9 +1,8 @@
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+import "@nomicfoundation/hardhat-toolbox";
 
-const PRIVATE_KEY = "0x36a15f8d63742eaabf9ebb32a8551db13d6a3167";
+const PRIVATE_KEY = "0x01c7939dc6827ee10bb7d26f420618c4af88c0029aa70be202f1ca7f29fe5bb4";
 
-module.exports = {
+const config = {
     solidity: "0.8.20",
     networks: {
         reddio: {
@@ -16,3 +15,5 @@ module.exports = {
         },
     },
 };
+
+export default config;

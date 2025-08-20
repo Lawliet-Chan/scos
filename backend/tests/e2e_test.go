@@ -124,7 +124,10 @@ func TestScenario_FullFlow(t *testing.T) {
 	cleanDB(t)
 
 	stockAmount := "20"
-	var appleAmount int64 = 10_000000
+	var (
+		appleAmount     int64 = 10_000000
+		sellAppleAmount       = "5_000000"
+	)
 
 	// 1. 给 user mint 10000000 APPLE token
 	mintAppleToken(t, userAddr, appleAmount)
@@ -156,7 +159,7 @@ func TestScenario_FullFlow(t *testing.T) {
 		"user_address":  userAddr,
 		"token_address": SCOStokenAddr,
 		"chain":         chainName,
-		"amount":        "ALL", // ⚠️ 这里需要你API支持全额买入, 不然换成具体数额
+		"amount":        sellAppleAmount,
 	}
 	data, code = doRequest(t, "POST", fmt.Sprintf("%s/api/buy", baseURL), buyBody)
 	if code != http.StatusOK {
@@ -169,7 +172,7 @@ func TestScenario_FullFlow(t *testing.T) {
 		"user_address":  userAddr,
 		"token_address": SCOStokenAddr,
 		"chain":         chainName,
-		"amount":        "ALL",
+		"amount":        sellAppleAmount,
 	}
 	data, code = doRequest(t, "POST", fmt.Sprintf("%s/api/sell", baseURL), sellBody)
 	if code != http.StatusOK {

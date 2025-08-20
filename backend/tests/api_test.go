@@ -1,49 +1,18 @@
 package tests
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"testing"
 )
 
 const (
-	baseURL   = "http://localhost:8080" // ⚠️ 改成你的API服务地址
+	baseURL   = "http://localhost:8080"
 	userAddr  = "0x36a15f8d63742eaabf9ebb32a8551db13d6a3167"
 	tokenAddr = "0xeB5e9Af4b798ec27A0f24DA22C7A7b3b657D05d9"
 	symbol    = "APPLE"
 	chainName = "Reddio"
 )
-
-// 通用请求函数
-func doRequest(t *testing.T, method, url string, body interface{}) ([]byte, int) {
-	t.Helper()
-
-	var req *http.Request
-	var err error
-	if body != nil {
-		b, _ := json.Marshal(body)
-		req, err = http.NewRequest(method, url, bytes.NewBuffer(b))
-		req.Header.Set("Content-Type", "application/json")
-	} else {
-		req, err = http.NewRequest(method, url, nil)
-	}
-	if err != nil {
-		t.Fatalf("创建请求失败: %v", err)
-	}
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		t.Fatalf("请求失败: %v", err)
-	}
-	defer resp.Body.Close()
-
-	data, _ := ioutil.ReadAll(resp.Body)
-	return data, resp.StatusCode
-}
 
 // 1. 获取Stock价格
 func TestGetStockPrice(t *testing.T) {

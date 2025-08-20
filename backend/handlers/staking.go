@@ -30,6 +30,18 @@ type StakeRequest struct {
 	StockSymbol  string `json:"stock_symbol" binding:"required"`
 }
 
+func (h *StakingHandler) GetStakeRecords(c *gin.Context) {
+	userAddr := c.Param("user_addr")
+
+	var records []models.StakeRecord
+	if err := h.db.Where("user_address = ?", userAddr).Find(&records).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Stake record not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, records)
+}
+
 func (h *StakingHandler) StakeStock(c *gin.Context) {
 	var req StakeRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

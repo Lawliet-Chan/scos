@@ -63,6 +63,7 @@ func main() {
 		api.GET("/user/:address/scos", stockHandler.GetUserSCOSBalance)
 
 		// 质押相关
+		api.GET("/stake/:user_addr", stakingHandler.GetStakeRecords)
 		api.POST("/stake", stakingHandler.StakeStock)
 		api.POST("/redeem", stakingHandler.RedeemStock)
 

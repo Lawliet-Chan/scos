@@ -94,7 +94,24 @@ API文档
      "active_stakes": 2
    }
 ```
-4. 质押Stock
+
+4. 获取用户质押记录
+```shell
+   GET /api/stake/{user_address}
+   Response: {
+     "user_address": "0x...",
+     "stakes": [
+       {
+         "token_address": "0x...",
+         "chain": "ethereum",
+         "amount": "100",
+         "stock_symbol": "APPLE",
+       }
+     ]
+   }
+```
+
+5. 质押Stock
 ```shell
   POST /api/stake
      Body: {

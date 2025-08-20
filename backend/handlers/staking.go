@@ -23,12 +23,11 @@ func NewStakingHandler(db *gorm.DB, bc *blockchain.BlockchainClient) *StakingHan
 }
 
 type StakeRequest struct {
-	UserAddress     string `json:"user_address" binding:"required"`
-	TokenAddress    string `json:"token_address" binding:"required"`
-	Chain           string `json:"chain" binding:"required"`
-	Amount          string `json:"amount" binding:"required"`
-	StockSymbol     string `json:"stock_symbol" binding:"required"`
-	ContractAddress string `json:"contract_address" binding:"required"`
+	UserAddress  string `json:"user_address" binding:"required"`
+	TokenAddress string `json:"token_address" binding:"required"`
+	Chain        string `json:"chain" binding:"required"`
+	Amount       string `json:"amount" binding:"required"`
+	StockSymbol  string `json:"stock_symbol" binding:"required"`
 }
 
 func (h *StakingHandler) StakeStock(c *gin.Context) {
@@ -64,17 +63,16 @@ func (h *StakingHandler) StakeStock(c *gin.Context) {
 
 	// 记录到数据库
 	stake := models.StakeRecord{
-		UserAddress:     req.UserAddress,
-		TokenAddress:    req.TokenAddress,
-		StockSymbol:     req.StockSymbol,
-		Chain:           req.Chain,
-		ContractAddress: req.ContractAddress,
-		Amount:          req.Amount,
-		SCOSBorrowed:    fmt.Sprintf("%.6f", scosAmount),
-		Status:          "active",
-		StakePrice:      fmt.Sprintf("%.6f", price.Price),
-		CreatedAt:       time.Now(),
-		UpdatedAt:       time.Now(),
+		UserAddress:  req.UserAddress,
+		TokenAddress: req.TokenAddress,
+		StockSymbol:  req.StockSymbol,
+		Chain:        req.Chain,
+		Amount:       req.Amount,
+		SCOSBorrowed: fmt.Sprintf("%.6f", scosAmount),
+		Status:       "active",
+		StakePrice:   fmt.Sprintf("%.6f", price.Price),
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
 	}
 
 	if err := h.db.Create(&stake).Error; err != nil {
@@ -102,10 +100,9 @@ func (h *StakingHandler) StakeStock(c *gin.Context) {
 }
 
 type RedeemRequest struct {
-	UserAddress     string `json:"user_address" binding:"required"`
-	TokenAddress    string `json:"token_address" binding:"required"`
-	Chain           string `json:"chain" binding:"required"`
-	ContractAddress string `json:"contract_address" binding:"required"`
+	UserAddress  string `json:"user_address" binding:"required"`
+	TokenAddress string `json:"token_address" binding:"required"`
+	Chain        string `json:"chain" binding:"required"`
 }
 
 func (h *StakingHandler) RedeemStock(c *gin.Context) {

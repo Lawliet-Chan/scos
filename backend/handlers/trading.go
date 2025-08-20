@@ -20,11 +20,10 @@ func NewTradingHandler(db *gorm.DB, bc *blockchain.BlockchainClient) *TradingHan
 }
 
 type BuyRequest struct {
-	UserAddress     string `json:"user_address" binding:"required"`
-	TokenAddress    string `json:"token_address" binding:"required"`
-	Chain           string `json:"chain" binding:"required"`
-	Amount          string `json:"amount" binding:"required"`
-	ContractAddress string `json:"contract_address" binding:"required"`
+	UserAddress  string `json:"user_address" binding:"required"`
+	TokenAddress string `json:"token_address" binding:"required"`
+	Chain        string `json:"chain" binding:"required"`
+	Amount       string `json:"amount" binding:"required"`
 }
 
 func (h *TradingHandler) BuyStock(c *gin.Context) {
@@ -53,11 +52,10 @@ func (h *TradingHandler) BuyStock(c *gin.Context) {
 }
 
 type SellRequest struct {
-	UserAddress     string `json:"user_address" binding:"required"`
-	TokenAddress    string `json:"token_address" binding:"required"`
-	Chain           string `json:"chain" binding:"required"`
-	Amount          string `json:"amount" binding:"required"`
-	ContractAddress string `json:"contract_address" binding:"required"`
+	UserAddress  string `json:"user_address" binding:"required"`
+	TokenAddress string `json:"token_address" binding:"required"`
+	Chain        string `json:"chain" binding:"required"`
+	Amount       string `json:"amount" binding:"required"`
 }
 
 func (h *TradingHandler) SellStock(c *gin.Context) {

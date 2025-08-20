@@ -102,7 +102,6 @@ API文档
        "token_address": "0x...",
        "chain": "ethereum",
        "amount": "100",
-       "contract_address": "0x..."
      }
 ```
    
@@ -113,7 +112,6 @@ API文档
      "user_address": "0x...",
      "token_address": "0x...",
      "chain": "ethereum",
-     "contract_address": "0x..."
    }
 ```
 6. 买入Stock
@@ -124,7 +122,6 @@ API文档
      "token_address": "0x...",
      "chain": "ethereum",
      "amount": "100",
-     "contract_address": "0x..."
    }
 ```
 7. 卖出Stock
@@ -135,6 +132,5 @@ API文档
      "token_address": "0x...",
      "chain": "ethereum",
      "amount": "100",
-     "contract_address": "0x..."
    }
 ```

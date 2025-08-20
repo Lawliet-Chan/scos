@@ -3,6 +3,7 @@ package blockchain
 import (
 	"context"
 	"crypto/ecdsa"
+	"log"
 	"math/big"
 	"scos/config"
 	"strings"
@@ -51,7 +52,11 @@ func NewBlockchainClient(chains map[string]config.ChainInfo, privateKeyHex strin
 }
 
 func (bc *BlockchainClient) GetClient(chain string) *ethclient.Client {
-	return bc.clients[chain].client
+	info := bc.clients[chain]
+	if info == nil {
+		log.Panicf("chain %s not found", chain)
+	}
+	return info.client
 }
 
 func (bc *BlockchainClient) GetVaultAddr(chain string) common.Address {

@@ -102,6 +102,7 @@ API文档
        "token_address": "0x...",
        "chain": "ethereum",
        "amount": "100",
+       "stock_symbol": "APPLE",
      }
 ```
    

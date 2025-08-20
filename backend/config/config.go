@@ -26,7 +26,7 @@ func LoadConfig() *Config {
 				RPC:          "https://reddio-dev.reddio.com/",
 				ChainID:      "50341",
 				SCOSAddress:  "0xeB5e9Af4b798ec27A0f24DA22C7A7b3b657D05d9",
-				VaultAddress: "0x0fE2B0c6177c79278A70E825581c691856E932D3",
+				VaultAddress: "0x0124e835BdE149aD885b765Bb8BF6f63735Fc4db",
 			},
 			"Scroll": {
 				RPC:         "https://sepolia-rpc.scroll.io",

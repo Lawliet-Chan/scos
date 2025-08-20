@@ -7,11 +7,12 @@ import (
 )
 
 const (
-	baseURL   = "http://localhost:8080"
-	userAddr  = "0x36a15f8d63742eaabf9ebb32a8551db13d6a3167"
-	tokenAddr = "0xeB5e9Af4b798ec27A0f24DA22C7A7b3b657D05d9"
-	symbol    = "APPLE"
-	chainName = "Reddio"
+	baseURL        = "http://localhost:8080"
+	userAddr       = "0x36a15f8d63742eaabf9ebb32a8551db13d6a3167"
+	SCOStokenAddr  = "0xeB5e9Af4b798ec27A0f24DA22C7A7b3b657D05d9"
+	APPLEtokenAddr = "0xE49f7C3b573bb2a4A54dbCCA9c06e5fc84C537DD"
+	symbol         = "APPLE"
+	chainName      = "Reddio"
 )
 
 // 1. 获取Stock价格
@@ -53,7 +54,7 @@ func TestStakeStock(t *testing.T) {
 	url := fmt.Sprintf("%s/api/stake", baseURL)
 	body := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 		"amount":        "100",
 		"stock_symbol":  symbol,
@@ -71,7 +72,7 @@ func TestRedeemStock(t *testing.T) {
 	url := fmt.Sprintf("%s/api/redeem", baseURL)
 	body := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 	}
 	data, code := doRequest(t, "POST", url, body)
@@ -87,7 +88,7 @@ func TestBuyStock(t *testing.T) {
 	url := fmt.Sprintf("%s/api/buy", baseURL)
 	body := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 		"amount":        "100",
 	}
@@ -104,7 +105,7 @@ func TestSellStock(t *testing.T) {
 	url := fmt.Sprintf("%s/api/sell", baseURL)
 	body := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 		"amount":        "100",
 	}

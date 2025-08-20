@@ -70,7 +70,7 @@ func mintAppleToken(t *testing.T, to string, amount int64) {
 	assert.NoError(t, err)
 
 	contract := bind.NewBoundContract(
-		common.HexToAddress(tokenAddr),
+		common.HexToAddress(APPLEtokenAddr),
 		parsedABI,
 		client, client, client,
 	)
@@ -83,10 +83,10 @@ func mintAppleToken(t *testing.T, to string, amount int64) {
 	tx, err := contract.Transact(auth, "mint", common.HexToAddress(to), big.NewInt(amount))
 	assert.NoError(t, err)
 
-	log.Printf("Mint交易已发送: %s", tx.Hash().Hex())
+	log.Printf("Mint交易已发送: %s 金额: %d", tx.Hash().Hex(), amount)
 }
 
-func transferApple(t *testing.T, from, to string, amount int64) {
+func transferApple(t *testing.T, to string, amount int64) {
 	client, err := ethclient.Dial(ethRPC)
 	if err != nil {
 		t.Fatalf("连接以太坊失败: %v", err)
@@ -98,7 +98,7 @@ func transferApple(t *testing.T, from, to string, amount int64) {
 	assert.NoError(t, err)
 
 	contract := bind.NewBoundContract(
-		common.HexToAddress(tokenAddr),
+		common.HexToAddress(SCOStokenAddr),
 		parsedABI,
 		client, client, client,
 	)
@@ -119,18 +119,21 @@ func cleanDB(t *testing.T) {
 
 // ============ 场景测试 ============
 func TestScenario_FullFlow(t *testing.T) {
+
+	t.Log("========== 功能测试 ===========")
 	cleanDB(t)
 
 	stockAmount := "20"
+	var appleAmount int64 = 10_000000
 
-	// 1. 给 user mint 100 APPLE token
-	mintAppleToken(t, userAddr, 100)
-	mintAppleToken(t, StockSellerAddr, 100)
+	// 1. 给 user mint 10000000 APPLE token
+	mintAppleToken(t, userAddr, appleAmount)
+	mintAppleToken(t, StockSellerAddr, appleAmount)
 
 	// 2. 质押 APPLE 20 个
 	stakeBody := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 		"stock_symbol":  symbol,
 		"amount":        stockAmount,
@@ -151,7 +154,7 @@ func TestScenario_FullFlow(t *testing.T) {
 	// 用全数 SCOS 买 APPLE
 	buyBody := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 		"amount":        "ALL", // ⚠️ 这里需要你API支持全额买入, 不然换成具体数额
 	}
@@ -164,7 +167,7 @@ func TestScenario_FullFlow(t *testing.T) {
 	// 卖出 APPLE
 	sellBody := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 		"amount":        "ALL",
 	}
@@ -177,7 +180,7 @@ func TestScenario_FullFlow(t *testing.T) {
 	// 4. 赎回 APPLE
 	redeemBody := map[string]interface{}{
 		"user_address":  userAddr,
-		"token_address": tokenAddr,
+		"token_address": SCOStokenAddr,
 		"chain":         chainName,
 	}
 	data, code = doRequest(t, "POST", fmt.Sprintf("%s/api/redeem", baseURL), redeemBody)

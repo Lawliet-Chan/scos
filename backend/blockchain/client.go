@@ -16,19 +16,27 @@ import (
 )
 
 type BlockchainClient struct {
-	clients    map[string]*ethclient.Client
+	clients    map[string]*cli
 	privateKey *ecdsa.PrivateKey
 }
 
+type cli struct {
+	client       *ethclient.Client
+	VaultAddress common.Address
+}
+
 func NewBlockchainClient(chains map[string]config.ChainInfo, privateKeyHex string) (*BlockchainClient, error) {
-	clients := make(map[string]*ethclient.Client)
+	clients := make(map[string]*cli)
 
 	for chainName, chain := range chains {
 		client, err := ethclient.Dial(chain.RPC)
 		if err != nil {
 			return nil, err
 		}
-		clients[chainName] = client
+		clients[chainName] = &cli{
+			client:       client,
+			VaultAddress: common.HexToAddress(chain.VaultAddress),
+		}
 	}
 
 	privateKey, err := crypto.HexToECDSA(strings.TrimPrefix(privateKeyHex, "0x"))
@@ -43,7 +51,11 @@ func NewBlockchainClient(chains map[string]config.ChainInfo, privateKeyHex strin
 }
 
 func (bc *BlockchainClient) GetClient(chain string) *ethclient.Client {
-	return bc.clients[chain]
+	return bc.clients[chain].client
+}
+
+func (bc *BlockchainClient) GetVaultAddr(chain string) common.Address {
+	return bc.clients[chain].VaultAddress
 }
 
 func (bc *BlockchainClient) auth(chain string) (*bind.TransactOpts, error) {
@@ -55,7 +67,7 @@ func (bc *BlockchainClient) auth(chain string) (*bind.TransactOpts, error) {
 
 }
 
-func (bc *BlockchainClient) StakeStock(chain, contractAddr, tokenAddr string, amount *big.Int, scosAmount *big.Int) (string, error) {
+func (bc *BlockchainClient) StakeStock(chain, tokenAddr string, amount *big.Int, scosAmount *big.Int) (string, error) {
 	client := bc.GetClient(chain)
 
 	contractABI := `[{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"scosAmount","type":"uint256"}],"name":"stakeStock","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
@@ -100,7 +112,7 @@ func (bc *BlockchainClient) StakeStock(chain, contractAddr, tokenAddr string, am
 	auth.GasLimit = gasLimit
 	auth.GasPrice = gasPrice
 
-	boundContract := bind.NewBoundContract(common.HexToAddress(contractAddr), parsedABI, client, client, client)
+	boundContract := bind.NewBoundContract(bc.GetVaultAddr(chain), parsedABI, client, client, client)
 	tx, err := boundContract.Transact(auth, "stakeStock", common.HexToAddress(tokenAddr), amount, scosAmount)
 	if err != nil {
 		return "", err
@@ -109,7 +121,7 @@ func (bc *BlockchainClient) StakeStock(chain, contractAddr, tokenAddr string, am
 	return tx.Hash().Hex(), nil
 }
 
-func (bc *BlockchainClient) UnstakeStock(chain, contractAddr, tokenAddr string) (string, error) {
+func (bc *BlockchainClient) UnstakeStock(chain, tokenAddr string) (string, error) {
 	client := bc.GetClient(chain)
 
 	contractABI := `[{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"unstakeStock","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
@@ -154,7 +166,7 @@ func (bc *BlockchainClient) UnstakeStock(chain, contractAddr, tokenAddr string) 
 	auth.GasLimit = gasLimit
 	auth.GasPrice = gasPrice
 
-	boundContract := bind.NewBoundContract(common.HexToAddress(contractAddr), parsedABI, client, client, client)
+	boundContract := bind.NewBoundContract(bc.GetVaultAddr(chain), parsedABI, client, client, client)
 	tx, err := boundContract.Transact(auth, "unstakeStock", common.HexToAddress(tokenAddr))
 	if err != nil {
 		return "", err
@@ -163,7 +175,7 @@ func (bc *BlockchainClient) UnstakeStock(chain, contractAddr, tokenAddr string) 
 	return tx.Hash().Hex(), nil
 }
 
-func (bc *BlockchainClient) Liquidate(chain, contractAddr, userAddr, tokenAddr string) (string, error) {
+func (bc *BlockchainClient) Liquidate(chain, userAddr, tokenAddr string) (string, error) {
 	client := bc.GetClient(chain)
 
 	contractABI := `{
@@ -223,7 +235,7 @@ func (bc *BlockchainClient) Liquidate(chain, contractAddr, userAddr, tokenAddr s
 	auth.GasLimit = gasLimit
 	auth.GasPrice = gasPrice
 
-	boundContract := bind.NewBoundContract(common.HexToAddress(contractAddr), parsedABI, client, client, client)
+	boundContract := bind.NewBoundContract(bc.GetVaultAddr(chain), parsedABI, client, client, client)
 	tx, err := boundContract.Transact(auth, "liquidate", common.HexToAddress(userAddr), common.HexToAddress(tokenAddr))
 	if err != nil {
 		return "", err

@@ -56,7 +56,7 @@ func (h *StakingHandler) StakeStock(c *gin.Context) {
 	scosAmountWei := new(big.Int)
 	scosAmountWei.SetString(fmt.Sprintf("%.0f", scosAmount*1000000), 10)
 
-	txHash, err := h.bc.StakeStock(req.Chain, req.ContractAddress, req.TokenAddress, amountWei, scosAmountWei)
+	txHash, err := h.bc.StakeStock(req.Chain, req.TokenAddress, amountWei, scosAmountWei)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to stake on blockchain"})
 		return
@@ -123,7 +123,7 @@ func (h *StakingHandler) RedeemStock(c *gin.Context) {
 		return
 	}
 
-	_, err := h.bc.UnstakeStock(req.Chain, req.ContractAddress, req.TokenAddress)
+	_, err := h.bc.UnstakeStock(req.Chain, req.TokenAddress)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to unstake on blockchain"})
 		return

@@ -137,7 +137,7 @@ func checkLiquidations(db *gorm.DB, bc *blockchain.BlockchainClient) {
 			// 执行清算
 			log.Printf("Liquidating stake %d due to price drop: %.2f%%", stake.ID, priceDropRatio*100)
 
-			txHash, err := bc.Liquidate(stake.Chain, stake.ContractAddress, stake.UserAddress, stake.TokenAddress)
+			txHash, err := bc.Liquidate(stake.Chain, stake.UserAddress, stake.TokenAddress)
 			if err != nil {
 				log.Printf("Failed to liquidate stake %d: %v", stake.ID, err)
 				continue

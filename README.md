@@ -10,7 +10,7 @@ SCOS是一个 以美股代币化资产为抵押，发行稳定币的CDP协议，
 ![](arch.png)
 
 ```shell
-合约地址:
+Reddio 合约地址:
    scos: 0xeB5e9Af4b798ec27A0f24DA22C7A7b3b657D05d9
    APPLE: 0xE49f7C3b573bb2a4A54dbCCA9c06e5fc84C537DD
    StockVault: 0x0fE2B0c6177c79278A70E825581c691856E932D3

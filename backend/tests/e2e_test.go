@@ -23,7 +23,11 @@ import (
 const (
 	ethRPC     = "https://reddio-dev.reddio.com/"
 	privateKey = "01c7939dc6827ee10bb7d26f420618c4af88c0029aa70be202f1ca7f29fe5bb4"
+
+	StockSellerAddr = "0xf30e1edec3c1633d3b4b67b9c37a597a95d808ff"
 )
+
+var ReddioChainID = big.NewInt(50341)
 
 // ============ 通用请求工具 ============
 func doRequest(t *testing.T, method, url string, body interface{}) ([]byte, int) {
@@ -75,11 +79,38 @@ func mintAppleToken(t *testing.T, to string, amount int64) {
 	assert.NoError(t, err)
 
 	// 调用 mint
-	auth, _ := bind.NewKeyedTransactorWithChainID(pk, big.NewInt(50341))
+	auth, _ := bind.NewKeyedTransactorWithChainID(pk, ReddioChainID)
 	tx, err := contract.Transact(auth, "mint", common.HexToAddress(to), big.NewInt(amount))
 	assert.NoError(t, err)
 
 	log.Printf("Mint交易已发送: %s", tx.Hash().Hex())
+}
+
+func transferApple(t *testing.T, from, to string, amount int64) {
+	client, err := ethclient.Dial(ethRPC)
+	if err != nil {
+		t.Fatalf("连接以太坊失败: %v", err)
+	}
+
+	erc20ABI := `[{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[],"type":"function"}]`
+
+	parsedABI, err := abi.JSON(strings.NewReader(erc20ABI))
+	assert.NoError(t, err)
+
+	contract := bind.NewBoundContract(
+		common.HexToAddress(tokenAddr),
+		parsedABI,
+		client, client, client,
+	)
+	pk, err := crypto.HexToECDSA(strings.TrimPrefix(privateKey, "0x"))
+	assert.NoError(t, err)
+
+	// 调用 transfer
+	auth, _ := bind.NewKeyedTransactorWithChainID(pk, ReddioChainID)
+	tx, err := contract.Transact(auth, "transfer", common.HexToAddress(to), big.NewInt(amount))
+	assert.NoError(t, err)
+
+	log.Printf("Transfer交易已发送: %s", tx.Hash().Hex())
 }
 
 func cleanDB(t *testing.T) {
@@ -89,15 +120,20 @@ func cleanDB(t *testing.T) {
 // ============ 场景测试 ============
 func TestScenario_FullFlow(t *testing.T) {
 	cleanDB(t)
+
+	stockAmount := "20"
+
 	// 1. 给 user mint 100 APPLE token
 	mintAppleToken(t, userAddr, 100)
+	mintAppleToken(t, StockSellerAddr, 100)
 
 	// 2. 质押 APPLE 20 个
 	stakeBody := map[string]interface{}{
 		"user_address":  userAddr,
 		"token_address": tokenAddr,
 		"chain":         chainName,
-		"amount":        "20",
+		"stock_symbol":  symbol,
+		"amount":        stockAmount,
 	}
 	data, code := doRequest(t, "POST", fmt.Sprintf("%s/api/stake", baseURL), stakeBody)
 	if code != http.StatusOK {

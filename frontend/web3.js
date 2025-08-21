@@ -10,6 +10,7 @@ class Web3Helper {
         if (typeof window.ethereum !== 'undefined') {
             try {
                 this.web3 = new Web3(window.ethereum);
+                console.log("ethereum____", window.ethereum);
 
                 // 请求账户访问
                 const accounts = await window.ethereum.request({
@@ -91,16 +92,16 @@ class Web3Helper {
 
     async sendTransaction(contract, method, params = [], value = 0) {
         try {
-            const gasPrice = await this.web3.eth.getGasPrice();
-            const gasEstimate = await contract.methods[method](...params).estimateGas({
-                from: this.account,
-                value: value
-            });
+            //const gasPrice = await this.web3.eth.getGasPrice();
+            //const gasEstimate = await contract.methods[method](...params).estimateGas({
+            //    from: this.account,
+            //    value: value
+            //});
 
             const tx = await contract.methods[method](...params).send({
                 from: this.account,
-                gas: Math.floor(gasEstimate * 1.2),
-                gasPrice: gasPrice,
+                //gas: Math.floor(gasEstimate * 1.2),
+                //gasPrice: gasPrice,
                 value: value
             });
 
@@ -120,7 +121,8 @@ class Web3Helper {
     }
 
     toWei(amount, decimals = 18) {
-        return this.web3.utils.toBN(amount).mul(this.web3.utils.toBN(10).pow(this.web3.utils.toBN(decimals)));
+        return BigInt(amount) * (10n ** BigInt(decimals));
+        //return this.web3.utils.toBN(amount).mul(this.web3.utils.toBN(10).pow(this.web3.utils.toBN(decimals)));
     }
 }
 

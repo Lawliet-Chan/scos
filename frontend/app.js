@@ -2,14 +2,14 @@ class DeFiApp {
     constructor() {
         this.web3Helper = new Web3Helper();
         this.apiBase = 'http://localhost:8080/api';
-        this.vaultContractAddress = '0x...'; // 替换为实际StockVault合约地址
+        this.vaultContractAddress = '0x0124e835BdE149aD885b765Bb8BF6f63735Fc4db'; // 替换为实际StockVault合约地址
         this.init();
     }
 
     async init() {
         this.setupEventListeners();
         await this.loadAllStockPrices();
-        await this.loadInitialData();
+        //await this.loadInitialData();
     }
 
     setupEventListeners() {
@@ -182,6 +182,7 @@ class DeFiApp {
             const stockContract = this.web3Helper.getContract(stockAddress, ERC20_ABI);
             const amountWei = this.web3Helper.toWei(amount, 6); // 假设6位小数
 
+            console.log("stockContract____", stockContract, this.vaultContractAddress, amountWei);
             await this.web3Helper.sendTransaction(stockContract, 'approve', [this.vaultContractAddress, amountWei]);
 
             // 调用后端API进行质押

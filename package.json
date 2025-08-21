@@ -4,7 +4,8 @@
   "description": "部署说明 1. 环境要求      - Node.js 16+       - Go 1.21+      - Solidity编译器",
   "main": "hardhat.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deployScos:reddio": "source .reddio.env && npx hardhat run scripts/deployScos.js --network reddio && unset ADMIN_ADMIN_PRIVATE_KEY && unset RPC_PROVIDER unset USER_PRIVATE_KEY"
   },
   "repository": {
     "type": "git",
@@ -12,6 +13,7 @@
   },
   "keywords": [],
   "author": "",
+
   "type": "module",
   "license": "ISC",
   "bugs": {
@@ -22,6 +24,8 @@
     "@nomicfoundation/hardhat-toolbox": "^6.1.0"
   },
   "dependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",
+    "@nomicfoundation/hardhat-ethers": "^4.0.0",
     "@openzeppelin/contracts": "^5.4.0"
   }
 }
